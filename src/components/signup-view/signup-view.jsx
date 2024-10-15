@@ -22,14 +22,19 @@ export const SingupView = () => {
 			headers: {
 				'Content-Type': 'application/json',
 			},
-		}).then((response) => {
-			if (response.ok) {
-				alert('Signup successful');
-				window.location.reload();
-			} else {
-				alert('Signup failed');
-			}
-		});
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				if (data.success) {
+					alert('Signup successful');
+					window.location.reload();
+				} else {
+					alert(`Signup failed: ${data.error.message}`);
+				}
+			})
+			.catch((error) => {
+				alert('Something went wrong');
+			});
 	};
 
 	return (
