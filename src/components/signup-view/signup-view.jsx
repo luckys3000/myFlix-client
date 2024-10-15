@@ -16,7 +16,7 @@ export const SingupView = () => {
 			Birthday: birthday,
 		};
 
-		fetch('https://luckyflix3000-b3f882eb1652.herokuapp.com/signup', {
+		fetch('https://luckyflix3000-b3f882eb1652.herokuapp.com/users', {
 			method: 'Post',
 			body: JSON.stringify(data),
 			headers: {
