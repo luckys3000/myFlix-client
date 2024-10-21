@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 
-export const SingupView = () => {
+export const SignupView = () => {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [email, setEmail] = useState('');
 	const [birthday, setBirthday] = useState('');
+
+	console.log('Inside signup view');
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
@@ -41,7 +43,7 @@ export const SingupView = () => {
 		<form onSubmit={handleSubmit}>
 			<label>
 				Username:
-				<input type='text' value={username} onChange={(e) => setUsername(e.target.value)} reruired minLength='6' />
+				<input type='text' value={username} onChange={(e) => setUsername(e.target.value)} required minLength='6' />
 			</label>
 			<label>
 				Password:

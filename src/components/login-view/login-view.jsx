@@ -23,9 +23,9 @@ export const LoginView = ({ onLoggedIn }) => {
 			.then((response) => response.json())
 			.then((data) => {
 				console.log('login response: ', data);
-				if (data.success) {
-					const { user, token } = data.data;
-					localStorage.setItem('user', json.stringify(user));
+				if (data.token) {
+					const { user, token } = data;
+					localStorage.setItem('user', JSON.stringify(user));
 					localStorage.setItem('token', token);
 					onLoggedIn(user, token);
 				} else {
@@ -33,6 +33,7 @@ export const LoginView = ({ onLoggedIn }) => {
 				}
 			})
 			.catch((error) => {
+				console.error('error', error);
 				alert('Something went wrong');
 			});
 	};
