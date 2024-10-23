@@ -33,7 +33,7 @@ export const MovieView = ({ movie, onBackClick }) => {
 
 MovieView.propTypes = {
 	movie: PropTypes.shape({
-		_id: PropTypes.string.isRequired,
+		_id: PropTypes.string,
 		Title: PropTypes.string.isRequired,
 		Description: PropTypes.string.isRequired,
 		ImagePath: PropTypes.string.isRequired,

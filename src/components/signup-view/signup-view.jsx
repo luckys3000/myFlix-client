@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 
-export const SingupView = () => {
+export const SignupView = () => {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [email, setEmail] = useState('');
 	const [birthday, setBirthday] = useState('');
+
+	console.log('Inside signup view');
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
@@ -16,27 +18,32 @@ export const SingupView = () => {
 			Birthday: birthday,
 		};
 
-		fetch('https://luckyflix3000-b3f882eb1652.herokuapp.com/signup', {
+		fetch('https://luckyflix3000-b3f882eb1652.herokuapp.com/users', {
 			method: 'Post',
 			body: JSON.stringify(data),
 			headers: {
 				'Content-Type': 'application/json',
 			},
-		}).then((response) => {
-			if (response.ok) {
-				alert('Signup successful');
-				window.location.reload();
-			} else {
-				alert('Signup failed');
-			}
-		});
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				if (data.success) {
+					alert('Signup successful');
+					window.location.reload();
+				} else {
+					alert(`Signup failed: ${data.error.message}`);
+				}
+			})
+			.catch((error) => {
+				alert('Something went wrong');
+			});
 	};
 
 	return (
 		<form onSubmit={handleSubmit}>
 			<label>
 				Username:
-				<input type='text' value={username} onChange={(e) => setUsername(e.target.value)} reruired minLength='6' />
+				<input type='text' value={username} onChange={(e) => setUsername(e.target.value)} required minLength='6' />
 			</label>
 			<label>
 				Password:

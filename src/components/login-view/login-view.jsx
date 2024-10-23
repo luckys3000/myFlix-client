@@ -23,13 +23,17 @@ export const LoginView = ({ onLoggedIn }) => {
 			.then((response) => response.json())
 			.then((data) => {
 				console.log('login response: ', data);
-				if (data.user) {
-					onLoggedIn(data.user, data.token);
+				if (data.token) {
+					const { user, token } = data;
+					localStorage.setItem('user', JSON.stringify(user));
+					localStorage.setItem('token', token);
+					onLoggedIn(user, token);
 				} else {
-					alert('No such user');
+					alert(`Login failed: ${data.error.message}`);
 				}
 			})
-			.catch((e) => {
+			.catch((error) => {
+				console.error('error', error);
 				alert('Something went wrong');
 			});
 	};
