@@ -57,6 +57,10 @@ export const MainView = () => {
 		return <div>The list is empty!</div>;
 	}
 
+	if (selectedMovie) {
+		return <MovieView movie={selectedMovie} onBackClick={() => setSelectedMovie(null)} />;
+	}
+
 	return (
 		<div>
 			{movies.map((movie) => (

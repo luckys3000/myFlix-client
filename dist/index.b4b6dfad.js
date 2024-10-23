@@ -27438,6 +27438,14 @@ const MainView = ()=>{
         lineNumber: 57,
         columnNumber: 10
     }, undefined);
+    if (selectedMovie) return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _movieView.MovieView), {
+        movie: selectedMovie,
+        onBackClick: ()=>setSelectedMovie(null)
+    }, void 0, false, {
+        fileName: "src/components/main-view/main-view.jsx",
+        lineNumber: 61,
+        columnNumber: 10
+    }, undefined);
     return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("div", {
         children: [
             movies.map((movie)=>/*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _movieCard.MovieCard), {
@@ -27447,7 +27455,7 @@ const MainView = ()=>{
                     }
                 }, movie.id, false, {
                     fileName: "src/components/main-view/main-view.jsx",
-                    lineNumber: 63,
+                    lineNumber: 67,
                     columnNumber: 5
                 }, undefined)),
             /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)("button", {
@@ -27459,13 +27467,13 @@ const MainView = ()=>{
                 children: "Logout"
             }, void 0, false, {
                 fileName: "src/components/main-view/main-view.jsx",
-                lineNumber: 71,
+                lineNumber: 75,
                 columnNumber: 4
             }, undefined)
         ]
     }, void 0, true, {
         fileName: "src/components/main-view/main-view.jsx",
-        lineNumber: 61,
+        lineNumber: 65,
         columnNumber: 3
     }, undefined);
 };
@@ -28453,7 +28461,7 @@ const MovieView = ({ movie, onBackClick })=>{
 _c = MovieView;
 MovieView.propTypes = {
     movie: (0, _propTypesDefault.default).shape({
-        _id: (0, _propTypesDefault.default).string.isRequired,
+        _id: (0, _propTypesDefault.default).string,
         Title: (0, _propTypesDefault.default).string.isRequired,
         Description: (0, _propTypesDefault.default).string.isRequired,
         ImagePath: (0, _propTypesDefault.default).string.isRequired,
