@@ -11,6 +11,8 @@ export const SignupView = () => {
 	console.log('Inside signup view');
 
 	const handleSubmit = (event) => {
+		// this prevents the default behavior of the form which is to
+		// reload the entire page
 		event.preventDefault();
 
 		const data = {
