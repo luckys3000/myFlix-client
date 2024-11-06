@@ -7,12 +7,9 @@ export const SignupView = () => {
 	const [password, setPassword] = useState('');
 	const [email, setEmail] = useState('');
 	const [birthday, setBirthday] = useState('');
+	const [errorMessage, setErrorMessage] = useState('');
 
-	console.log('Inside signup view');
-
-	const handleSubmit = (event) => {
-		// this prevents the default behavior of the form which is to
-		// reload the entire page
+	const handleSubmit = async (event) => {
 		event.preventDefault();
 
 		const data = {
@@ -22,25 +19,40 @@ export const SignupView = () => {
 			Birthday: birthday,
 		};
 
-		fetch('https://luckyflix3000-b3f882eb1652.herokuapp.com/users', {
-			method: 'Post',
-			body: JSON.stringify(data),
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		})
-			.then((response) => response.json())
-			.then((data) => {
-				if (data.success) {
-					alert('Signup successful');
-					window.location.reload();
-				} else {
-					alert(`Signup failed: ${data.error.message}`);
-				}
-			})
-			.catch((error) => {
-				alert('Something went wrong');
+		try {
+			const response = await fetch('https://luckyflix3000-b3f882eb1652.herokuapp.com/users', {
+				method: 'POST',
+				body: JSON.stringify(data),
+				headers: {
+					'Content-Type': 'application/json',
+				},
 			});
+
+			// Check if response is successful
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+
+			const responseData = await response.json();
+
+			// Log the response to see its structure
+			console.log('Response data:', responseData);
+
+			// Check for success in the response data
+			if (responseData.success) {
+				alert('Signup successful');
+				window.location.reload();
+			} else {
+				// Check if the error message exists and handle accordingly
+				const errorMessage = responseData.error ? responseData.error.message : 'Unknown error occurred';
+				alert(`Signup failed: ${errorMessage}`);
+			}
+		} catch (error) {
+			// Log error and show generic alert
+			console.error('Error during signup:', error);
+			setErrorMessage('Something went wrong. Please try again.');
+			alert('Something went wrong');
+		}
 	};
 
 	return (
@@ -60,13 +72,16 @@ export const SignupView = () => {
 				<Form.Control type='text' value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email' required />
 			</Form.Group>
 
-			<Form.Group controlId='=formBirthday'>
+			<Form.Group controlId='formBirthday'>
 				<Form.Label>Birthday:</Form.Label>
 				<Form.Control type='date' value={birthday} onChange={(e) => setBirthday(e.target.value)} placeholder='Birthday' />
 			</Form.Group>
+
 			<Button variant='primary' type='submit'>
 				Submit
 			</Button>
+
+			{errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
 		</Form>
 	);
 };
