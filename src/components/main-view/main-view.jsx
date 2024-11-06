@@ -3,8 +3,9 @@ import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
 import { LoginView } from '../login-view/login-view';
 import { SignupView } from '../signup-view/signup-view';
+import { ProfileView } from '../profile-view/profile-view';
 import { NavigationBar } from '../navigation-bar/navigation-bar';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col, Container, Button } from 'react-bootstrap';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 export const MainView = () => {
@@ -80,6 +81,22 @@ export const MainView = () => {
 							</>
 						}
 					/>
+
+					<Route
+						path='/profile'
+						element={
+							<>
+								{!user ? (
+									<Navigate to='/login' />
+								) : (
+									<Container className='flex-grow-1'>
+										<ProfileView movies={movies} user={user} token={token} />
+									</Container>
+								)}
+							</>
+						}
+					/>
+
 					<Route
 						path='/movies/:movieId'
 						element={
