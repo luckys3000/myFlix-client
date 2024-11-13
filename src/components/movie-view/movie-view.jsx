@@ -31,7 +31,7 @@ export const MovieView = ({ movies }) => {
 				<span>{movie.Director.Name}</span>
 				<div>
 					<span>Favorite: </span>
-					<span>{movie.Featured}</span>
+					<span>{movie.FavoriteMovies}</span>
 				</div>
 			</div>
 			<Link to={`/`}>
@@ -59,7 +59,7 @@ MovieView.propTypes = {
 				Birth: PropTypes.string,
 				Death: PropTypes.string,
 			}),
-			Featured: PropTypes.bool, //added for completeness
+			FavoriteMovies: PropTypes.bool, //added for completeness
 		})
 	).isRequired,
 };

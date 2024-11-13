@@ -14,7 +14,7 @@ export const MovieCard = ({ movie }) => {
 			<Card.Img variant='top' src={movie.ImagePath} />
 			<Card.Body>
 				<Card.Title>{movie.Title}</Card.Title>
-				<Card.Text>Director: {movie.Director && movie.Director.name ? movie.Director.name : 'Unknown'}</Card.Text>
+				<Card.Text>Director: {movie.Director && movie.Director.Name ? movie.Director.Name : 'Unknown'}</Card.Text>
 				<Link to={`/movies/${encodeURIComponent(movie.id)}`}>
 					<Button variant='link'>Open</Button>
 				</Link>
@@ -28,7 +28,7 @@ MovieCard.propTypes = {
 		Title: PropTypes.string.isRequired,
 		ImagePath: PropTypes.string.isRequired,
 		Director: PropTypes.shape({
-			name: PropTypes.string, // Optional since it may not always be present
+			Name: PropTypes.string, // Optional since it may not always be present
 		}).isRequired,
 	}).isRequired,
 };
