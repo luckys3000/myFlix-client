@@ -30,7 +30,10 @@ export const SignupView = () => {
 
 			// Check if response is successful
 			if (!response.ok) {
-				throw new Error('Network response was not ok');
+				const errorData = await response.json(); // Attempt to parse error response
+				console.log('Error data:', errorData); // Log error data for insights
+				setErrorMessage(errorData.message || 'Unknown error occurred'); // Display specific message if available
+				return;
 			}
 
 			const responseData = await response.json();
@@ -39,13 +42,12 @@ export const SignupView = () => {
 			console.log('Response data:', responseData);
 
 			// Check for success in the response data
-			if (responseData.success) {
+			if (responseData.Email && responseData.Username) {
 				alert('Signup successful');
 				window.location.reload();
 			} else {
-				// Check if the error message exists and handle accordingly
 				const errorMessage = responseData.error ? responseData.error.message : 'Unknown error occurred';
-				alert(`Signup failed: ${errorMessage}`);
+				setErrorMessage(`Signup failed: ${errorMessage}`);
 			}
 		} catch (error) {
 			// Log error and show generic alert
