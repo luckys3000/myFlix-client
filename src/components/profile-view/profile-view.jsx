@@ -1,50 +1,49 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Form, Button, Container, Row, Col, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import './profile-view.scss';
 import { MovieCard } from '../movie-card/movie-card';
 
-//Helper function to format date as "yyyy-MM-dd"
 const formatDate = (dateString) => {
 	return dateString ? dateString.split('T')[0] : '';
 };
 
 export const ProfileView = ({ user, movies, token, onLoggedOut }) => {
 	const [userData, setUserData] = useState({
-		username: user.Username,
-		email: user.Email,
-		dob: formatDate(user.Birthday) || '', //Format dob intially.  Ensure dob is an empty string if undefined
+		username: user.Username || '',
+		email: user.Email || '',
+		dob: formatDate(user.Birthday) || '',
 	});
 	const [newPassword, setNewPassword] = useState('');
 	const [favoriteMovies, setFavoriteMovies] = useState([]);
 	const [message, setMessage] = useState('');
 	const [usernameError, setUsernameError] = useState('');
 
-	// Fetch user details and favorite movies on mount
+	// Fetch User Data using fetch API
 	useEffect(() => {
 		const fetchUserData = async () => {
 			try {
-				const response = await axios.get(`/users/${user.username}`, { headers: { Authorization: `Bearer ${token}` } });
+				const response = await fetch(`/users/${user.Username}`, {
+					headers: { Authorization: `Bearer ${token}` },
+				});
+
+				if (!response.ok) {
+					throw new Error('Error fetching user data');
+				}
+
+				const data = await response.json();
+				console.log('Fetched User Data:', data);
+
 				setUserData({
-					username: response.data.Username,
-					email: response.data.Email,
-					dob: formatDate(response.data.Birthday), //Format dob for date input
+					username: data.Username,
+					email: data.Email,
+					dob: formatDate(data.Birthday) || '',
 				});
 
-				// Debugging log
-				console.log('Step 1');
-				console.log('Fetched user data:', response.data);
-				console.log('Set userData state:', {
-					username: response.data.username,
-					email: response.data.email,
-					dob: formatDate(response.data.birthday) || '',
-				});
-
-				const favoriteMoviesList = response.data.FavoriteMovies || []; // Ensure it's defined
-				setFavoriteMovies(movies.filter((m) => favoriteMoviesList.includes(m.Featured)));
+				const favoriteMoviesList = data.FavoriteMovies || [];
+				setFavoriteMovies(movies.filter((m) => favoriteMoviesList.includes(m.FavoriteMovies)));
 			} catch (error) {
-				console.error(error);
+				console.error('Error fetching user data:', error);
 				setMessage('Error fetching user data.');
 			}
 		};
@@ -52,12 +51,11 @@ export const ProfileView = ({ user, movies, token, onLoggedOut }) => {
 		fetchUserData();
 	}, [user.username, movies, token]);
 
-	// Handle updating user information
+	// Update User Profile using fetch API
 	const handleUpdate = async (e) => {
 		e.preventDefault();
 		const { username, email, dob } = userData;
 
-		// Validate username length
 		if (username.length < 6) {
 			setUsernameError('Username must be at least 6 characters long.');
 			return;
@@ -65,30 +63,32 @@ export const ProfileView = ({ user, movies, token, onLoggedOut }) => {
 			setUsernameError('');
 		}
 
-		// Prepare data for user update
-		const updateData = { email, dob: dob || '' }; //Ensure dob is never undefined
-
-		// Only set new password if provided
+		const updateData = { email, dob: dob || '' };
 		if (newPassword) {
 			updateData.password = newPassword;
 		}
 
 		try {
-			const response = await axios.put(`/users/${username}`, updateData, { headers: { Authorization: `Bearer ${token}` } });
+			const response = await fetch(`/users/${username}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`,
+				},
+				body: JSON.stringify(updateData),
+			});
+
+			if (!response.ok) {
+				throw new Error('Error updating user');
+			}
+
+			const data = await response.json();
 			setMessage('User updated successfully');
 			setUserData({
 				...userData,
-				email: response.data.Email,
-				dob: formatDate(response.data.Birthday) || '', //Format dob after update
+				email: data.Email,
+				dob: formatDate(data.Birthday) || '',
 			});
-
-			// Debugging log
-			console.log('Updated userData state:', {
-				...userData,
-				email: response.data.Email,
-				dob: formatDate(response.data.Birthday) || '',
-			});
-			// Clear new password input after successful update
 			setNewPassword('');
 		} catch (error) {
 			console.error('Error updating user:', error);
@@ -96,36 +96,46 @@ export const ProfileView = ({ user, movies, token, onLoggedOut }) => {
 		}
 	};
 
-	// Handle deregistration
-	const handleDeregister = () => {
+	// Deregister User using fetch API
+	const handleDeregister = async () => {
 		if (window.confirm('Are you sure you want to delete your account?')) {
-			axios
-				.delete(`/users/${userData.username}`, { headers: { Authorization: `Bearer ${token}` } })
-				.then(() => {
-					alert('User deregistered');
-					onLoggedOut();
-				})
-				.catch((error) => {
-					console.error('Error deregistering user:', error);
-					setMessage('Error deregistering user.');
+			try {
+				const response = await fetch(`/users/${userData.username}`, {
+					method: 'DELETE',
+					headers: { Authorization: `Bearer ${token}` },
 				});
+
+				if (!response.ok) {
+					throw new Error('Error deregistering user');
+				}
+
+				alert('User deregistered');
+				onLoggedOut();
+			} catch (error) {
+				console.error('Error deregistering user:', error);
+				setMessage('Error deregistering user.');
+			}
 		}
 	};
 
-	// Handle removing a favorite movie
-	const removeFavorite = (movieFeatured) => {
-		axios
-			.delete(`/users/${userData.username}/movies/${movieFeatured}`, { headers: { Authorization: `Bearer ${token}` } })
-			.then(() => {
-				setFavoriteMovies(favoriteMovies.filter((movie) => movie.Featured !== movieFeatured));
-			})
-			.catch((error) => {
-				console.error('Error removing favorite:', error);
-				setMessage('Error removing favorite movie.');
+	// Remove Favorite Movie using fetch API
+	const removeFavorite = async (movieFeatured) => {
+		try {
+			const response = await fetch(`/users/${userData.username}/movies/${movieFeatured}`, {
+				method: 'DELETE',
+				headers: { Authorization: `Bearer ${token}` },
 			});
-	};
 
-	console.log('Render - userData state:', userData); //Helps verify that dob stays consistent across renders.
+			if (!response.ok) {
+				throw new Error('Error removing favorite movie');
+			}
+
+			setFavoriteMovies(favoriteMovies.filter((movie) => movie.Featured !== movieFeatured));
+		} catch (error) {
+			console.error('Error removing favorite:', error);
+			setMessage('Error removing favorite movie.');
+		}
+	};
 
 	return (
 		<Container>
@@ -145,7 +155,7 @@ export const ProfileView = ({ user, movies, token, onLoggedOut }) => {
 						</Form.Group>
 						<Form.Group controlId='formDob'>
 							<Form.Label>Date of Birth</Form.Label>
-							<Form.Control type='date' value={userData.dob} onChange={(e) => setUserData({ ...userData, dob: e.target.value })} />
+							<Form.Control type='date' value={userData.dob || ''} onChange={(e) => setUserData({ ...userData, dob: e.target.value })} />
 						</Form.Group>
 						<h4>Change Password</h4>
 						<Form.Group controlId='formNewPassword'>
