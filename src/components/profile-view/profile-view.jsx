@@ -41,7 +41,7 @@ export const ProfileView = ({ user, movies, token, onLoggedOut }) => {
 				});
 
 				const favoriteMoviesList = data.FavoriteMovies || [];
-				setFavoriteMovies(movies.filter((m) => favoriteMoviesList.includes(m.FavoriteMovies)));
+				setFavoriteMovies(movies.filter((movie) => favoriteMoviesList.includes(movie._id)));
 			} catch (error) {
 				console.error('Error fetching user data:', error);
 				setMessage('Error fetching user data.');
@@ -119,9 +119,9 @@ export const ProfileView = ({ user, movies, token, onLoggedOut }) => {
 	};
 
 	// Remove Favorite Movie using fetch API
-	const removeFavorite = async (movieFeatured) => {
+	const removeFavorite = async (movieId) => {
 		try {
-			const response = await fetch(`/users/${userData.username}/movies/${movieFeatured}`, {
+			const response = await fetch(`/users/${userData.username}/movies/${movieId}`, {
 				method: 'DELETE',
 				headers: { Authorization: `Bearer ${token}` },
 			});
@@ -130,7 +130,8 @@ export const ProfileView = ({ user, movies, token, onLoggedOut }) => {
 				throw new Error('Error removing favorite movie');
 			}
 
-			setFavoriteMovies(favoriteMovies.filter((movie) => movie.Featured !== movieFeatured));
+			// Update favoriteMovies to reflect removal
+			setFavoriteMovies(favoriteMovies.filter((movie) => movie._id !== movieId));
 		} catch (error) {
 			console.error('Error removing favorite:', error);
 			setMessage('Error removing favorite movie.');
@@ -179,7 +180,7 @@ export const ProfileView = ({ user, movies, token, onLoggedOut }) => {
 							<Col md={4} key={movie.Featured}>
 								<Card>
 									<MovieCard movie={movie} />
-									<Button variant='secondary' onClick={() => removeFavorite(movie.Featured)}>
+									<Button variant='secondary' onClick={() => removeFavorite(movie._id)}>
 										Remove from Favorites
 									</Button>
 								</Card>
