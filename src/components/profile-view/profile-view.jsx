@@ -49,7 +49,7 @@ export const ProfileView = ({ user, movies, token, onLoggedOut }) => {
 		};
 
 		fetchUserData();
-	}, [user.username, movies, token]);
+	}, [user.Username, movies, token]);
 
 	// Update User Profile using fetch API
 	const handleUpdate = async (e) => {
@@ -166,7 +166,7 @@ export const ProfileView = ({ user, movies, token, onLoggedOut }) => {
 						<Button variant='primary' type='submit'>
 							Update Profile
 						</Button>
-						<Button variant='danger' onClick={handleDeregister} className='ml-2'>
+						<Button variant='danger' onClick={handleDeregister} className='ms-2'>
 							Deregister
 						</Button>
 					</Form>
@@ -177,7 +177,7 @@ export const ProfileView = ({ user, movies, token, onLoggedOut }) => {
 					<h4>Your Favorite Movies</h4>
 					<Row>
 						{favoriteMovies.map((movie) => (
-							<Col md={4} key={movie.Featured}>
+							<Col md={4} key={movie._id}>
 								<Card>
 									<MovieCard movie={movie} />
 									<Button variant='secondary' onClick={() => removeFavorite(movie._id)}>

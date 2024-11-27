@@ -42652,7 +42652,7 @@ const ProfileView = ({ user, movies, token, onLoggedOut })=>{
         };
         fetchUserData();
     }, [
-        user.username,
+        user.Username,
         movies,
         token
     ]);
@@ -42886,7 +42886,7 @@ const ProfileView = ({ user, movies, token, onLoggedOut })=>{
                                 /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)((0, _reactBootstrap.Button), {
                                     variant: "danger",
                                     onClick: handleDeregister,
-                                    className: "ml-2",
+                                    className: "ms-2",
                                     children: "Deregister"
                                 }, void 0, false, {
                                     fileName: "src/components/profile-view/profile-view.jsx",
@@ -42947,7 +42947,7 @@ const ProfileView = ({ user, movies, token, onLoggedOut })=>{
                                         lineNumber: 181,
                                         columnNumber: 9
                                     }, undefined)
-                                }, movie.Featured, false, {
+                                }, movie._id, false, {
                                     fileName: "src/components/profile-view/profile-view.jsx",
                                     lineNumber: 180,
                                     columnNumber: 8
@@ -42985,7 +42985,7 @@ $RefreshReg$(_c, "ProfileView");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-dev-runtime":"iTorj","react":"21dqq","react-bootstrap":"3AD9A","react-router-dom":"9xmpe","./profile-view.scss":"eyKYH","../movie-card/movie-card":"bwuIu","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru"}],"eyKYH":[function() {},{}],"bsPVM":[function(require,module,exports) {
+},{"react/jsx-dev-runtime":"iTorj","react":"21dqq","react-bootstrap":"3AD9A","react-router-dom":"9xmpe","./profile-view.scss":"eyKYH","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"km3Ru","../movie-card/movie-card":"bwuIu"}],"eyKYH":[function() {},{}],"bsPVM":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$abf5 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
